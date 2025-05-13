@@ -1,0 +1,118 @@
+
+.list-dark{
+background-color: #efefef;
+}
+.user-image{
+    height: 35px;
+    width: 35px;
+    display: inline;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.header-user-image{
+    height: 35px;
+    width: 35px;
+    display: inline;
+    border-radius: 50%;
+    cursor: pointer;
+}
+h3{
+    font-size:40px ;
+}
+.chat-section{
+    display: none;
+}
+#chat-container{
+    background-color: rgb(222, 226, 226);
+    max-width:555px;
+    height:350px;
+
+    overflow-y: scroll;
+}
+.border{
+    width:60%;
+}
+.offline-status{
+    color: red;
+}
+
+.online-status{
+    color: green;
+}
+
+.current-user-chat{
+    text-align: right;
+    margin: 10px;
+
+}
+.current-user-chat h5,.distance-user-chat h5{
+    font-size:25px;
+}
+
+.distance-user-chat{
+
+    margin: 10px;
+
+}
+
+#message{
+    display: inline;
+    width:82%;
+    height: 30px;
+    margin-top: 10px;
+    border: 1px black solid !important;
+}
+
+#btnSend{
+
+}
+
+
+ .chat-section header {
+    max-width: 555px;
+    margin-bottom: 2px;
+    background: #508ce6;
+    padding: 10px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: move;
+  }
+   .chat-section header:before,
+   .chat-section header:after {
+    display: block;
+    content: '';
+    clear: both;
+  }
+  .chat-section header h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    float: left;
+  }
+  .chat-section header h2 a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+ .chat-section header .tools {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: right;
+  }
+   .chat-section header .tools li {
+    display: inline-block;
+    margin-right: 6px;
+  }
+   .chat-section header .tools li:last-child {
+    margin: 0;
+  }
+  .chat-section header .tools li a {
+    color: #ffffff;
+    text-decoration: none;
+    -webkit-transition: all 0.3s linear 0s;
+    -moz-transition: all 0.3s linear 0s;
+    -ms-transition: all 0.3s linear 0s;
+    -o-transition: all 0.3s linear 0s;
+    transition: all 0.3s linear 0s;
+  }
