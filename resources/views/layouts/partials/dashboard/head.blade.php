@@ -1,21 +1,15 @@
 <!doctype html>
-<html lang="en" class="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
-    dir="ltr" data-pc-theme_contrast="" data-pc-theme="light">
+<html lang="en" class="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr" dir="ltr" data-pc-theme_contrast="" data-pc-theme="light">
 <!-- [Head] start -->
-
 <head>
     <title>{{ $title }}</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- [Meta] -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="author" content="" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <link href="{{ asset('assets-dashboard/css/plugins/bootstrap.min.css') }}" rel="stylesheet" />
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content="Phoenixcoded" />
     <!-- [Favicon] icon -->
     <link rel="icon" href="{{ asset('assets-dashboard/images/favicon.svg') }}" type="image/x-icon" />
     <!-- [Font] Family -->
@@ -32,33 +26,16 @@
     <link rel="stylesheet" href="{{ asset('assets-dashboard/fonts/material.css') }}" />
     <!-- [Template CSS Files] -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <link rel="stylesheet" href="{{ asset('assets-dashboard/css/style.css') }}" id="" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="{{asset('assets-dashboard/chat/css/style.css')}}" rel="stylesheet">
-    <script src="{{asset('assets-dashboard/chat/js/custom.js')}}"></script>
-    <script>
-
-   </script>
-    <style>
-        .offcanvas.offcanvas-end {
-            width: 35%;
-        }
-    </style>
     @stack('styles')
-
-
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
-
 <body>
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
-        <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
-            <div
-                class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 transition-[transform_0.2s_linear] origin-left animate-[2.1s_cubic-bezier(0.65,0.815,0.735,0.395)_0s_infinite_normal_none_running_loader-animate]">
-            </div>
+        <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0 bg-primary-500/10">
+            <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 transition-[transform_0.2s_linear] origin-left animate-[2.1s_cubic-bezier(0.65,0.815,0.735,0.395)_0s_infinite_normal_none_running_loader-animate]"></div>
         </div>
     </div>
 

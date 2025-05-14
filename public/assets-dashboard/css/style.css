@@ -2266,7 +2266,7 @@ text:is([data-pc-theme="dark"] *),.apexcharts-theme-light .apexcharts-menu-icon:
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .show:not([data-pc-toggle="collapse"]){
-  display: block;
+  display: block !important;
 }
 .alert{
   margin-bottom: 0.75rem;
@@ -6719,9 +6719,6 @@ table.\!dataTable thead tr >.dtfc-fixed-start:is([data-pc-theme="dark"] *),table
 .max-h-\[300px\]{
   max-height: 300px;
 }
-.max-h-\[40vh\]{
-  max-height: 40vh;
-}
 .max-h-\[calc\(100vh_-_100px\)\]{
   max-height: calc(100vh - 100px);
 }
@@ -7066,6 +7063,9 @@ table.\!dataTable thead tr >.dtfc-fixed-start:is([data-pc-theme="dark"] *),table
 }
 .basis-auto{
   flex-basis: auto;
+}
+.basis-full{
+  flex-basis: 100%;
 }
 .border-collapse{
   border-collapse: collapse;
@@ -9426,11 +9426,11 @@ table.\!dataTable thead tr >.dtfc-fixed-start:is([data-pc-theme="dark"] *),table
 .text-center{
   text-align: center;
 }
-.text-right{
-  text-align: right;
-}
 .\!text-right{
   text-align: right !important;
+}
+.text-right{
+  text-align: right;
 }
 .text-start{
   text-align: start;
@@ -12554,6 +12554,9 @@ table.\!dataTable thead tr >.dtfc-fixed-start:is([data-pc-theme="dark"] *),table
   .md\:max-w-\[540px\]{
     max-width: 540px;
   }
+  .md\:basis-10\/12{
+    flex-basis: 83.333333%;
+  }
   .md\:flex-row{
     flex-direction: row;
   }
@@ -12623,6 +12626,9 @@ table.\!dataTable thead tr >.dtfc-fixed-start:is([data-pc-theme="dark"] *),table
   }
   .lg\:max-w-\[960px\]{
     max-width: 960px;
+  }
+  .lg\:basis-8\/12{
+    flex-basis: 66.666667%;
   }
   .lg\:gap-6{
     gap: 1.5rem;

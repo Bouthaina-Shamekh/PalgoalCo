@@ -41,7 +41,6 @@ function menu_click() {
       }
       // Toggle submenu visibility (active remove who has menu link not clicked and it's submenu also hide)
       if (targetElement.parentNode.classList.contains('pc-trigger')) {
-        console.log(123);
         targetElement.parentNode.classList.remove('pc-trigger');
         slideUp(targetElement.parentNode.children[1], 200);
         window.setTimeout(() => {
@@ -49,7 +48,6 @@ function menu_click() {
           targetElement.parentNode.children[1].style.display = 'none';
         }, 200);
       } else {
-        console.log(456);
         // Close other open submenus
         var tc = document.querySelectorAll('li.pc-trigger');
         for (var t = 0; t < tc.length; t++) {
@@ -81,11 +79,11 @@ function menu_click() {
   var pc_sub_link_click = document.querySelectorAll('.pc-navbar > li:not(.pc-caption) li.pc-hasmenu');
   for (var i = 0; i < pc_sub_link_click.length; i++) {
     pc_sub_link_click[i].addEventListener('click', function (event) {
-      event.stopPropagation();
       var targetElement = event.target;
       if (targetElement.tagName == 'SPAN') {
         targetElement = targetElement.parentNode;
       }
+      event.stopPropagation();
       // Toggle submenu visibility
       if (targetElement.parentNode.classList.contains('pc-trigger')) {
         targetElement.parentNode.classList.remove('pc-trigger');

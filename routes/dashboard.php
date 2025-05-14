@@ -16,6 +16,14 @@ Route::group([
 ], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/clients', function () {
+        return view('dashboard.clients.index');
+    });
+    Route::get('/clients/create', function () {
+        return view('dashboard.clients.add');
+    });
+
+
 
 });
 

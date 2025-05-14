@@ -1,5 +1,6 @@
 <header class="pc-header" id="header">
-    <div class="header-wrapper flex max-sm:px-[15px] px-[25px] grow"><!-- [Mobile Media Block] start -->
+    <div class="header-wrapper flex max-sm:px-[15px] px-[25px] grow">
+        <!-- [Mobile Media Block] start -->
         <div class="me-auto pc-mob-drp">
             <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
                 <!-- ======= Menu collapse Icon ===== -->
@@ -29,15 +30,11 @@
         <!-- [Mobile Media Block end] -->
         <div class="ms-auto">
             <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
-
-              
                 <li class="nav-item ">
                     <a class="nav-link" rel="alternate" hreflang="" href="">
                         <img width="20" src="" alt="">
                     </a>
                 </li>
-                
-
                 <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle me-0" data-pc-toggle="dropdown" href="#" role="button"
                         aria-haspopup="false" aria-expanded="false">
@@ -66,9 +63,6 @@
                         </a>
                     </div>
                 </li>
-
-
-
                 <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle me-0" data-pc-toggle="dropdown" href="#" role="button"
                         aria-haspopup="false" aria-expanded="false">
@@ -88,8 +82,6 @@
                         </button>
                     </div>
                 </li>
-
-
                 <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle me-0" data-pc-toggle="dropdown" href="#" role="button"
                         aria-haspopup="false" aria-expanded="false">
@@ -219,7 +211,6 @@
                                             {{__('Logout')}}
                                         </button>
                                     </form>
-
                                 </div>
                             </div>
                         </div>

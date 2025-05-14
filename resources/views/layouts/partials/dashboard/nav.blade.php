@@ -48,16 +48,25 @@
                 </div>
             </div>
             <ul class="pc-navbar">
-                <li class="pc-item pc-caption">
-                    {{-- <label>{{__('Basic')}}</label> --}}
-                </li>
-             
+                {{-- <li class="pc-item pc-caption">
+                    <label>{{__('Basic')}}</label>
+                </li> --}}
                 <li class="pc-item">
-                    <a href="" class="pc-link">
+                    <a href="{{ Route('dashboard.home') }}" class="pc-link">
                         <span class="pc-micon">
                             <i class="material-icons-two-tone pc-icon">grid_on</i>
                         </span>
-                        <span class="pc-mtext">{{__('admin.Categories')}}</span>
+                        <span class="pc-mtext">{{__('admin.home')}}</span>
+                    </a>
+                </li>
+                <li class="pc-item">
+                    <a href="/dashboard/clients" class="pc-link">
+                        <span class="pc-micon">
+                            <svg class="pc-icon">
+                                <use xlink:href="#custom-story"></use>
+                            </svg>
+                        </span>
+                        <span class="pc-mtext" data-i18n="clients">clients</span>
                     </a>
                 </li>
             
