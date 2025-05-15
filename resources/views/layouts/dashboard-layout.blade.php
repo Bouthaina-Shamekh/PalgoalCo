@@ -10,6 +10,7 @@
     <div class="pc-container">
         <div class="pc-content">
           {{ $slot }}
+           @livewireScripts
         </div>
     </div>
     <!-- [ Main Content ] end -->

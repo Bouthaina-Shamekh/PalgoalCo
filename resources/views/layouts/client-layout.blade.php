@@ -37,6 +37,7 @@
         <div class="flex-container">
 
             {{ $slot }}
+             @livewireScripts
         </div>
         <!-- [ Main Content ] end -->
     </div>

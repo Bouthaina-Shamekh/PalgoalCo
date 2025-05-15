@@ -1,5 +1,7 @@
 <x-dashboard-layout>
-    <!-- [ breadcrumb ] start -->
+   
+    <livewire:client-component />
+    
     <div class="page-header">
         <div class="page-block">
             <ul class="breadcrumb">
@@ -12,8 +14,7 @@
             </div>
         </div>
     </div>
-    <!-- [ breadcrumb ] end -->
-    <!-- [ Main Content ] start -->
+
     <div class="grid grid-cols-12 gap-x-6">
         <div class="col-span-12">
             <div class="card table-card">
@@ -21,18 +22,12 @@
                     <div class="sm:flex items-center justify-between">
                         <h5 class="mb-3 sm:mb-0">Clients List</h5>
                         <div>
-                            <a href="/dashboard/clients/create" class="btn btn-primary">Add Clients</a>
+                           <a href="#" wire:click="resetForm" class="btn btn-primary">Add Client</a>
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between mb-4">
-                    <label for="search" class="sr-only">ابحث عن عميل</label>
-                    <input 
-                    id="search"
-                    type="text" 
-                    wire:model.debounce.300ms="search" 
-                    placeholder="Search clients..." 
-                    class="form-search relative" />
+                    <input type="text" wire:model.debounce.500ms="search" placeholder="Search clients..." class="form-search relative" />
                     <select wire:model="perPage" class="border rounded px-2 py-1">
                         <option value="5">5 per page</option>
                         <option value="10">10 per page</option>
@@ -41,7 +36,7 @@
                 </div>
                 <div class="card-body pt-3">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="pc-dt-simple">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -55,79 +50,112 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse ($clients as $client)
                                 <tr>
-                                    <td>1</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <div class="flex items-center w-44">
                                             <div class="shrink-0">
-                                                <img src="../assets/images/user/avatar-1.jpg" alt="user image" class="rounded-full w-10" />
+                                                <img src="{{ $client->avatar ?? asset('assets/images/user/avatar-1.jpg') }}" class="rounded-full w-10" />
                                             </div>
                                             <div class="grow ltr:ml-3 rtl:mr-3">
-                                                <h6 class="mb-0">hazem alyahya</h6>
+                                                <h6 class="mb-0">{{ $client->first_name }} {{ $client->last_name }}</h6>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>info@palgoals.com</td>
+                                    <td>{{ $client->email }}</td>
                                     <td>0</td>
                                     <td>0</td>
-                                    <td>2025-05-10</td>
-                                    <td><span class="badge text-danger bg-danger-500/10 rounded-full text-sm">inactive</span></td>
+                                    <td>{{ $client->created_at->toDateString() }}</td>
                                     <td>
-                                        <a href="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                        @if ($client->can_login)
+                                        <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Active</span>
+                                        @else
+                                        <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Inactive</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a wire:click="view({{ $client->id }})" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                             <i class="ti ti-eye text-xl leading-none"></i>
                                         </a>
-                                        <a href="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                        <a wire:click="edit({{ $client->id }})" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                             <i class="ti ti-edit text-xl leading-none"></i>
                                         </a>
-                                        <a href="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                        <a wire:click="delete({{ $client->id }})" onclick="confirm('Are you sure?') || event.stopImmediatePropagation()" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                             <i class="ti ti-trash text-xl leading-none"></i>
                                         </a>
                                     </td>
                                 </tr>
+                                @empty
                                 <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <div class="flex items-center w-44">
-                                            <div class="shrink-0">
-                                                <img src="../assets/images/user/avatar-1.jpg" alt="user image" class="rounded-full w-10" />
-                                            </div>
-                                            <div class="grow ltr:ml-3 rtl:mr-3">
-                                                <h6 class="mb-0">hazem alyahya</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>info@palgoals.com</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>2025-05-10</td>
-                                    <td><span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Active</span></td>
-                                    <td>
-                                        <a href="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
-                                            <i class="ti ti-eye text-xl leading-none"></i>
-                                        </a>
-                                        <a href="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
-                                            <i class="ti ti-edit text-xl leading-none"></i>
-                                        </a>
-                                        <a href="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
-                                            <i class="ti ti-trash text-xl leading-none"></i>
-                                        </a>
-                                    </td>
+                                    <td colspan="8" class="text-center text-gray-500">No clients found.</td>
                                 </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <nav aria-label="Page navigation example">
-                    <ul class="flex justify-center *:*:inline-block *:*:px-3 *:*:py-1.5 *:border *:border-theme-border *:dark:border-themedark-border hover:*:bg-secondary-300/10 mb-3">
-                        <li class="ltr:rounded-l-lg rtl:rounded-r-lg"><a href="#!">Previous</a></li>
-                        <li><a href="#!">1</a></li>
-                        <li><a href="#!">2</a></li>
-                        <li><a href="#!">3</a></li>
-                        <li class="ltr:rounded-r-lg rtl:rounded-l-lg"><a href="#!">Next</a></li>
-                    </ul>
-                </nav>
+                <div class="mt-4">
+                    {{ $clients->links() }}
+                </div>
             </div>
         </div>
     </div>
-    <!-- [ Main Content ] end -->
+
+    <div class="card mt-4" wire:ignore.self>
+    <div class="card-header">
+        <h5 class="mb-0">{{ $clientIdBeingEdited ? 'Edit Client' : 'Add New Client' }}</h5>
+    </div>
+    <div class="card-body">
+        <form wire:submit.prevent="save">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label>First Name</label>
+                    <input type="text" wire:model="first_name" class="form-input" />
+                    @error('first_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label>Last Name</label>
+                    <input type="text" wire:model="last_name" class="form-input" />
+                    @error('last_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input type="email" wire:model="email" class="form-input" />
+                    @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" wire:model="password" class="form-input" />
+                    @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label>Company Name</label>
+                    <input type="text" wire:model="company_name" class="form-input" />
+                    @error('company_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input type="text" wire:model="phone" class="form-input" />
+                    @error('phone') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label>Avatar</label>
+                    <input type="file" wire:model="avatar" class="form-input" />
+                    @error('avatar') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label>Can Login</label>
+                    <input type="checkbox" wire:model="can_login" />
+                    @error('can_login') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">{{ $clientIdBeingEdited ? 'Update' : 'Save' }}</button>
+                <button type="button" wire:click="resetForm" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 </x-dashboard-layout>
