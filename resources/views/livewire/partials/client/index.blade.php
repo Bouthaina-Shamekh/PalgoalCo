@@ -24,13 +24,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center justify-between mb-4">
-                    <input type="text" wire:model="search" wire:input="updateSearch" placeholder="Search clients..." />
-                    <select wire:model="perPage" wire:change="updatePerPage" class="border rounded px-2 py-1">
-                        <option value="5">5 per page</option>
-                        <option value="10">10 per page</option>
-                        <option value="25">25 per page</option>
-                    </select>
+                <div class="flex items-center justify-between py-4 px-5 gap-4">
+                    <x-form.input
+                        name="first_name"
+                        wire:model="search"
+                        wire:input="updateSearch"
+                        placeholder="Search clients..." />
+                    <x-form.select
+                        wire:model="perPage"
+                        wire:change="updatePerPage"
+                        name="perPage"
+                        :options="[
+                            '5'   => '5 per page',
+                            '10' => '10 per page',
+                            '25' => '25 per page',
+                        ]" />
                 </div>
                 <div class="card-body pt-3">
                     <div class="table-responsive">

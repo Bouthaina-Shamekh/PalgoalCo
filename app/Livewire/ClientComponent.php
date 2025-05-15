@@ -1,15 +1,10 @@
 <?php
-
-
 namespace App\Livewire;
-
-
 
 use Livewire\Component;
 use App\Models\Client;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-
 
 class ClientComponent extends Component
 {
@@ -59,7 +54,6 @@ class ClientComponent extends Component
     {
         $this->mode = 'index';
     }
-
 
     public function resetForm()
     {
@@ -126,7 +120,6 @@ class ClientComponent extends Component
     {
         $this->resetPage();
     }
-
 
     public function render()
     {
