@@ -14,7 +14,7 @@ Route::group([
     'as' => 'dashboard.',
 ], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/clients', ClientComponent::class)->name('clients.index');
+    Route::get('/clients', [HomeController::class, 'clients'])->name('clients');
 });
 
 

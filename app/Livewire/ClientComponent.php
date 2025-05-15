@@ -8,105 +8,136 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Client;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+
 
 class ClientComponent extends Component
 {
 
     use WithFileUploads;
+    use WithPagination;
 
+    public $mode = 'index';
     public $search = '';
     public $perPage = 10;
-    public $clients;
-    public $first_name, $last_name, $email, $password, $company_name, $phone, $can_login = true, $avatar;
-    public $clientIdBeingEdited = null;
+    public $clientId = null;
 
-    public function mount()
+    public $client = [
+        'first_name' => '',
+        'last_name' => '',
+        'email' => '',
+        'password' => '',
+        'company_name' => '',
+        'phone' => '',
+        'can_login' => true,
+        'avatar' => null,
+    ];
+
+    public function showAdd()
     {
-        $this->loadClients();
+        $this->mode = 'add';
+        $this->resetForm();
     }
 
-    public function loadClients()
+    public function showEdit($id)
     {
-        $this->clients = Client::all();
+        $this->mode = 'edit';
+        $this->clientId = $id;
+        $client = Client::findOrFail($id);
+        $this->client = [
+            'first_name' => $client->first_name,
+            'last_name' => $client->last_name,
+            'email' => $client->email,
+            'company_name' => $client->company_name,
+            'phone' => $client->phone,
+            'can_login' => $client->can_login,
+            'avatar_url' => $client->avatar,
+        ];
+    }
+
+    public function showIndex()
+    {
+        $this->mode = 'index';
+    }
+
+
+    public function resetForm()
+    {
+        $this->client = [
+            'first_name' => '',
+            'last_name' => '',
+            'email' => '',
+            'password' => '',
+            'company_name' => '',
+            'phone' => '',
+            'can_login' => true,
+            'avatar' => null,
+        ];
     }
 
     public function save()
     {
         $validated = $this->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:clients,email,' . $this->clientIdBeingEdited,
-            'company_name' => 'required',
-            'password' => $this->clientIdBeingEdited ? 'nullable' : 'required|min:6',
-            'phone' => 'nullable',
-            'can_login' => 'boolean',
-            'avatar' => 'nullable|image|max:1024',
+            'client.first_name' => 'required',
+            'client.last_name' => 'required',
+            'client.email' => 'required|email|unique:clients,email,' . $this->clientId,
+            'client.company_name' => 'required',
+            'client.password' => $this->clientId ? 'nullable' : 'required|min:6',
+            'client.phone' => 'nullable',
+            'client.can_login' => 'boolean',
+            'client.avatar' => 'nullable|image|max:1024',
         ]);
+        $clientValidated = $validated['client'];
 
-        if ($this->avatar) {
-            $validated['avatar'] = $this->avatar->store('avatars', 'public');
+        $clientValidated['can_login'] = $clientValidated['can_login'] ? 1 : 0;
+
+        if (isset($this->client['avatar'])) {
+            $clientValidated['avatar'] = $this->client['avatar']->store('avatars', 'public');
         }
 
-        if ($this->clientIdBeingEdited) {
-            $client = Client::findOrFail($this->clientIdBeingEdited);
-            $client->update(array_merge($validated, [
-                'password' => $validated['password'] ? bcrypt($validated['password']) : $client->password
-            ]));
+        if ($this->clientId) {
+            $client = Client::findOrFail($this->clientId);
+            if (isset($clientValidated['password'])) {
+                $clientValidated['password'] = bcrypt($clientValidated['password']);
+            }
+            $client->update($clientValidated);
         } else {
-            $validated['password'] = bcrypt($validated['password']);
-            Client::create($validated);
+            $clientValidated['password'] = bcrypt($clientValidated['password']);
+            Client::create($clientValidated);
         }
 
         $this->resetForm();
-        $this->loadClients();
+        $this->resetPage();
+        $this->mode = 'index';
     }
 
-    public function edit($id)
-    {
-        $client = Client::findOrFail($id);
-        $this->clientIdBeingEdited = $id;
-        $this->first_name = $client->first_name;
-        $this->last_name = $client->last_name;
-        $this->email = $client->email;
-        $this->company_name = $client->company_name;
-        $this->phone = $client->phone;
-        $this->can_login = $client->can_login;
-    }
 
     public function delete($id)
     {
         Client::findOrFail($id)->delete();
-        $this->loadClients();
+        $this->resetPage();
     }
 
-//     public function confirmDelete($id)
-// {
-//     $this->clientIdBeingDeleted = $id;
-// }
-
-// public function deleteConfirmed()
-// {
-//     Client::findOrFail($this->clientIdBeingDeleted)->delete();
-//     $this->clientIdBeingDeleted = null;
-//     $this->loadClients();
-// }
-
-    public function resetForm()
+    public function updateSearch()
     {
-        $this->reset(['first_name', 'last_name', 'email', 'password', 'company_name', 'phone', 'can_login', 'avatar', 'clientIdBeingEdited']);
+        $this->resetPage();
+    }
+    public function updatePerPage()
+    {
+        $this->resetPage();
     }
 
-     public function render()
+
+    public function render()
     {
         $clients = Client::query()
-            ->when($this->search, fn($query) =>
-                $query->where('first_name', 'like', "%{$this->search}%")
-                      ->orWhere('last_name', 'like', "%{$this->search}%")
-                      ->orWhere('email', 'like', "%{$this->search}%")
-            )
-            ->latest()
-            ->paginate($this->perPage);
+        ->where('first_name', 'like', '%'.$this->search.'%')
+        ->orWhere('last_name', 'like', '%'.$this->search.'%')
+        ->orWhere('email', 'like', '%'.$this->search.'%')
+        ->orWhere('company_name', 'like', '%'.$this->search.'%')
+        ->orWhere('phone', 'like', '%'.$this->search.'%')
+        ->paginate($this->perPage);
 
-        return view('dashboard.clients.index', compact('clients'));
+        return view('livewire.client', compact('clients'));
     }
 }

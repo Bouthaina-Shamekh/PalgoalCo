@@ -11,4 +11,9 @@ class HomeController extends Controller
     {
         return view('dashboard.index');
     }
+
+    public function clients()
+    {
+        return view('dashboard.clients');
+    }
 }
