@@ -66,7 +66,17 @@
                                 <use xlink:href="#custom-story"></use>
                             </svg>
                         </span>
-                        <span class="pc-mtext" data-i18n="clients">clients</span>
+                        <span class="pc-mtext" data-i18n="clients">Clients</span>
+                    </a>
+                </li>
+                <li class="pc-item">
+                    <a href="/dashboard/sites" class="pc-link">
+                        <span class="pc-micon">
+                            <svg class="pc-icon">
+                                <use xlink:href="#custom-story"></use>
+                            </svg>
+                        </span>
+                        <span class="pc-mtext" data-i18n="sites">Sites</span>
                     </a>
                 </li>
             
