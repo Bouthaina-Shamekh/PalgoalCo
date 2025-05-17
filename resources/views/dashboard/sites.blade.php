@@ -1,3 +1,3 @@
 <x-dashboard-layout>
-    <livewire:sites-component />
+    <livewire:site-component />
 </x-dashboard-layout>

@@ -26,7 +26,7 @@
                 </div>
                 <div class="flex items-center justify-between py-4 px-5 gap-4">
                     <x-form.input
-                        name="first_name"
+                        name="cpanel_username"
                         wire:model="search"
                         wire:input="updateSearch"
                         placeholder="Search clients..." />
@@ -53,20 +53,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @forelse ($sites as $site) --}}
+                                @forelse ($sites as $site) 
                                 <tr>
-                                    <td>1</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <div class="flex items-center w-44">
-                                            {{-- <div class="shrink-0">
-                                                <img src="{{ $client->avatar ?? asset('assets/images/user/avatar-1.jpg') }}" class="rounded-full w-10" />
-                                            </div> --}}
                                             <div class="grow ltr:ml-3 rtl:mr-3">
-                                                <h6 class="mb-0">hazem alyahya</h6>
+                                                <h6 class="mb-0">{{ $site->client_id }}</h6>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>www.palgoals.com</td>
+                                    <td>{{$site->domain_id}}</td>
                                     <td>
                                         <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Active</span>
                                         <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Inactive</span>
@@ -84,14 +81,14 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" class="text-center text-gray-500">No clients found.</td>
+                                    <td colspan="8" class="text-center text-gray-500">No sites found.</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="mt-4">
-                    {{-- {{ $clients->links() }} --}}
+                    {{-- {{ $sites->links() }} --}}
                 </div>
             </div>
         </div>

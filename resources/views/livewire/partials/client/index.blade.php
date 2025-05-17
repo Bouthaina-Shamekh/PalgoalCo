@@ -1,4 +1,19 @@
 <div>
+    @if (session()->has('success'))
+    <div class="alert alert-success mb-4" role="alert">
+        {{ session('success') }}
+    </div>
+@endif
+@if ($errors->any())
+    <div class="alert alert-danger mb-4" role="alert">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <div class="page-header">
         <div class="page-block">
             <ul class="breadcrumb">
@@ -62,7 +77,8 @@
                                     <td>
                                         <div class="flex items-center w-44">
                                             <div class="shrink-0">
-                                                <img src="{{ $client->avatar ?? asset('assets/images/user/avatar-1.jpg') }}" class="rounded-full w-10" />
+                                                 <img src="{{ $client->avatar ? asset('storage/' . $client->avatar) : asset('assets/images/user/avatar-1.jpg') }}" class="rounded-full w-10" />
+
                                             </div>
                                             <div class="grow ltr:ml-3 rtl:mr-3">
                                                 <h6 class="mb-0">{{ $client->first_name }} {{ $client->last_name }}</h6>
