@@ -11,7 +11,7 @@
   <select id="{{ $name }}"
   name="{{ $name }}"
   {{ $attributes->merge(['class' => 'form-select']) }}>
-  <option value="">-- اختر --</option>
+  <option value="">— Select —</option>
   @foreach($options as $value => $text)
   <option value="{{ $value }}">{{ $text }}</option>
     @endforeach

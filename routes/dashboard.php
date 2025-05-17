@@ -15,6 +15,7 @@ Route::group([
 ], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/clients', [HomeController::class, 'clients'])->name('clients');
+    Route::get('/subscriptions', [HomeController::class, 'subscriptions'])->name('subscriptions');
     Route::get('/sites', [HomeController::class, 'sites'])->name('sites');
 });
 

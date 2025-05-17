@@ -21,11 +21,16 @@ return new class extends Migration
             $table->foreignId('plan_id')
                   ->constrained()
                   ->cascadeOnDelete();
-            // حالة الاشتراك (active, canceled, pending, etc)
             $table->string('status');
-            // تواريخ البداية والانتهاء
-            $table->date('start_date');
+            $table->date('start_date'); // active, canceled, pending, …
             $table->date('end_date')->nullable();
+            $table->enum('domain_option', ['new','subdomain','existing'])
+                  ->default('subdomain')
+                  ->comment('new=register new domain, subdomain=our subdomain, existing=use client’s domain');
+            // اسم الدومين/السب-دومين/الدومين الحالي
+            $table->string('domain_name')
+                  ->nullable()
+                  ->comment('مثلاً “example.com” أو “client.palgoals.com” أو دومين العميل');
             $table->timestamps();
         });
     }
