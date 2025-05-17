@@ -51,11 +51,11 @@
                         </div>
                         <div class="col-span-12 md:col-span-6">
                             <x-form.input
-                                name="mobile"
+                                name="phone"
                                 type="number"
-                                wire:model="client.mobile"
-                                label="Mobile Number" />
-                            @error('client.mobile') <span class="text-red-600">{{ $message }}</span> @enderror
+                                wire:model="client.phone"
+                                label="Mobile Number" required />
+                            @error('client.phone') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
                             <x-form.input
@@ -82,13 +82,35 @@
                                 wire:model="client.password"
                                 label="password" />
                             @error('client.password') <span class="text-red-600">{{ $message }}</span> @enderror
+                            <span>
+                                @if ($uppercase)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Uppercase</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Uppercase</span>
+                                @endif
+                                @if ($lowercase)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Lowercase</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Lowercase</span>
+                                @endif
+                                @if ($number)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Number</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Number</span>
+                                @endif
+                                @if ($specialChars)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Special Character</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Special Character</span>
+                                @endif
+                            </span>
                         </div>
                         <div class="col-span-12 md:col-span-6">
                             <x-form.input
-                                wire:model="client.password_confirmation"
+                                wire:model="client.confirm_password"
                                 type="password"
                                 label="Confirm Password" />
-                            @error('client.password_confirmation') <span class="text-red-600">{{ $message }}</span> @enderror
+                            @error('client.confirm_password') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
                             <div class="col-span-12 md:col-span-6">
@@ -98,10 +120,7 @@
                                     accept="image/*"
                                     class="form-control" />
                                 @error('client.avatar') <span class="text-red-600">{{ $message }}</span> @enderror
-                                {{-- @if ($client.avatar) --}}
-                                <img src="{{ $client['avatar_url'] }}"
-                                    class="mt-2 w-20 h-20 rounded-full" />
-                                {{-- @endif --}}
+                                <img src="{{ $client['avatar_url'] ? asset('storage/' . $client['avatar_url']) : '' }}" class="mt-2 w-20 h-20" />
                             </div>
                         </div>
                         <div class="col-span-12 text-right">

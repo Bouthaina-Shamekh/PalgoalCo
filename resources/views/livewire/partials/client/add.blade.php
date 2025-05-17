@@ -37,82 +37,73 @@
                     </div>
                     @endif
 
-                    <form wire:submit.prevent="submit" class="grid grid-cols-12 gap-x-6">
+                    <form wire:submit.prevent="save" class="grid grid-cols-12 gap-x-6">
                         <!-- First & Last Name -->
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input
-                                name="first_name"
-                                wire:model="client.first_name"
-                                label="First Name" />
+                            <x-form.input name="first_name" wire:model="client.first_name" label="First Name" />
                             @error('client.first_name') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input
-                                name="last_name"
-                                wire:model="client.last_name"
-                                label="Last Name" />
+                            <x-form.input name="last_name" wire:model="client.last_name" label="Last Name" />
                             @error('client.last_name') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input
-                                name="company_name"
-                                wire:model="client.company_name"
-                                label="company name" />
+                            <x-form.input name="company_name" wire:model="client.company_name" label="company name" />
                             @error('client.company_name') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input
-                                name="mobile"
-                                type="number"
-                                wire:model="client.mobile"
-                                label="Mobile Number" />
-                            @error('client.mobile') <span class="text-red-600">{{ $message }}</span> @enderror
+                            <x-form.input name="phone" type="number" required wire:model="client.phone" label="Mobile Number" />
+                            @error('client.phone') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input
-                                name="email"
-                                type="email"
-                                wire:model="client.email"
-                                label="email" />
+                            <x-form.input name="email" type="email" wire:model="client.email" label="email" />
                             @error('client.email') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.select
-                                wire:model="client.can_login"
-                                name="can_login"
-                                label="status"
-                                :options="[
+                            <x-form.select wire:model="client.can_login" name="can_login" label="status" :options="[
                                 '1'   => 'active',
                                 '0' => 'inactive',
                                 ]" />
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input
-                                name="password"
-                                type="password"
-                                wire:model.defer="client.password"
-                                label="password" />
+                            <x-form.input name="password" wire:input="checkPassword" type="password" wire:model.defer="client.password" label="password" />
                             @error('client.password') <span class="text-red-600">{{ $message }}</span> @enderror
+
+                            <span>
+                                @if ($uppercase)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Uppercase</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Uppercase</span>
+                                @endif
+                                @if ($lowercase)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Lowercase</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Lowercase</span>
+                                @endif
+                                @if ($number)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Number</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Number</span>
+                                @endif
+                                @if ($specialChars)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Special Character</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Special Character</span>
+                                @endif
+                            </span>
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input
-                                wire:model.defer="client.confirm_password"
-                                type="password"
-                                label="Confirm Password" />
+                            <x-form.input wire:input="checkPassword" wire:model.defer="client.confirm_password" type="password" label="Confirm Password" />
 
-                            @error('client.password_confirmation') <span class="text-red-600">{{ $message }}</span> @enderror
+                            @error('client.confirm_password') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
                             <div class="col-span-12 md:col-span-6">
                                 <label class="form-label">Avatar</label>
-                                <input type="file"
-                                    wire:model="client.avatar"
-                                    accept="image/*"
-                                    class="form-control" />
+                                <input type="file" wire:model="client.avatar" accept="image/*" class="form-control" />
                                 @error('client.avatar') <span class="text-red-600">{{ $message }}</span> @enderror
                                 {{-- @if ($client.avatar) --}}
-                                <img src="...."
-                                    class="mt-2 w-20 h-20 rounded-full" />
+                                <img src="...." class="mt-2 w-20 h-20 rounded-full" />
                                 {{-- @endif --}}
                             </div>
                         </div>

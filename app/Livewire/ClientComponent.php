@@ -13,6 +13,22 @@ class ClientComponent extends Component
     use WithFileUploads;
     use WithPagination;
 
+    public $alert = false;
+    public $alertType = 'success';
+    public $alertMessage = '';
+
+    public function showAlert($message, $type = 'success')
+    {
+        $this->alert = true;
+        $this->alertType = $type;
+        $this->alertMessage = $message;
+    }
+
+    public function closeModal()
+    {
+        $this->alert = false;
+    }
+
     public $mode = 'index';
     public $search = '';
     public $perPage = 10;
@@ -23,17 +39,19 @@ class ClientComponent extends Component
         'last_name' => '',
         'email' => '',
         'password' => '',
-        'password_confirmation' => '',
+        'confirm_password' => '',
         'company_name' => '',
         'phone' => '',
         'can_login' => true,
         'avatar' => null,
+        'avatar_url' => null,
     ];
 
     public function showAdd()
     {
         $this->mode = 'add';
         $this->resetForm();
+        $this->closeModal();
     }
 
     public function showEdit($id)
@@ -49,15 +67,17 @@ class ClientComponent extends Component
             'phone' => $client->phone,
             'can_login' => $client->can_login,
             'password' => '',
-            'password_confirmation' => '',
+            'confirm_password' => '',
             'avatar' => null,
             'avatar_url' => $client->avatar,
         ];
+        $this->closeModal();
     }
 
     public function showIndex()
     {
         $this->mode = 'index';
+        $this->closeModal();
     }
 
     public function resetForm()
@@ -67,7 +87,7 @@ class ClientComponent extends Component
             'last_name' => '',
             'email' => '',
             'password' => '',
-            'password_confirmation' => '',
+            'confirm_password' => '',
             'company_name' => '',
             'phone' => '',
             'can_login' => true,
@@ -76,6 +96,28 @@ class ClientComponent extends Component
         $this->clientId = null;
     }
 
+    public $uppercase;
+    public $lowercase;
+    public $number;
+    public $specialChars;
+    public function checkPasswordError(){
+        $this->uppercase = preg_match('@[A-Z]@', $this->client['password']);
+        $this->lowercase = preg_match('@[a-z]@', $this->client['password']);
+        $this->number    = preg_match('@[0-9]@', $this->client['password']);
+        $this->specialChars = preg_match('@[^\w]@', $this->client['password']);
+    }
+    public function checkPassword(){
+        $this->checkPasswordError();
+        if($this->client['password'] != $this->client['confirm_password']){
+            $this->showAlert('Passwords do not match.', 'warning');
+            return;
+        }
+        if(!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->client['password']) < 8) {
+            $this->showAlert('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.', 'warning');
+            return;
+        }
+        $this->closeModal();
+    }
     public function save()
     {
         $validated = $this->validate([
@@ -83,11 +125,11 @@ class ClientComponent extends Component
             'client.last_name' => 'required',
             'client.email' => 'required|email|unique:clients,email,' . $this->clientId,
             'client.company_name' => 'nullable',
-            'client.password' => $this->clientId ? 'nullable|min:6|same:client.password_confirmation' : 'required|min:6|same:client.password_confirmation',
-            'client.password_confirmation' => $this->clientId ? 'nullable' : 'required',
+            'client.password' => $this->clientId ? 'nullable|min:6|same:client.confirm_password' : 'required|min:6|same:client.confirm_password',
+            'client.confirm_password' => $this->clientId ? 'nullable' : 'required',
             'client.phone' => 'required',
             'client.can_login' => 'boolean',
-            'client.avatar' => 'nullable|image|max:1024',
+            'client.avatar' => 'nullable|image',
         ]);
 
         $clientValidated = $validated['client'];
@@ -102,6 +144,8 @@ class ClientComponent extends Component
                 }
 
                 $clientValidated['avatar'] = $this->client['avatar']->store('avatars', 'public');
+            }else{
+                $clientValidated['avatar'] = $client->avatar;
             }
 
             if (!empty($clientValidated['password'])) {
@@ -111,7 +155,7 @@ class ClientComponent extends Component
             }
 
             $client->update($clientValidated);
-            session()->flash('success', 'Client updated successfully.');
+            $this->showAlert('Client updated successfully.', 'success');
         } else {
             if ($this->client['avatar']) {
                 $clientValidated['avatar'] = $this->client['avatar']->store('avatars', 'public');
@@ -119,7 +163,7 @@ class ClientComponent extends Component
 
             $clientValidated['password'] = bcrypt($clientValidated['password']);
             Client::create($clientValidated);
-            session()->flash('success', 'Client added successfully.');
+            $this->showAlert('Client added successfully.', 'success');
         }
 
         $this->resetForm();
@@ -135,7 +179,7 @@ class ClientComponent extends Component
         }
         $client->delete();
 
-        session()->flash('success', 'Client deleted successfully.');
+        $this->showAlert('Client deleted successfully.', 'success');
         $this->resetPage();
     }
 

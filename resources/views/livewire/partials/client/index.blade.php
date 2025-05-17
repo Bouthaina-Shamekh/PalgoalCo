@@ -1,19 +1,4 @@
 <div>
-    @if (session()->has('success'))
-    <div class="alert alert-success mb-4" role="alert">
-        {{ session('success') }}
-    </div>
-@endif
-@if ($errors->any())
-    <div class="alert alert-danger mb-4" role="alert">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
     <div class="page-header">
         <div class="page-block">
             <ul class="breadcrumb">
@@ -34,26 +19,18 @@
                     <div class="sm:flex items-center justify-between">
                         <h5 class="mb-3 sm:mb-0">Clients List</h5>
                         <div>
-                            <a href="#" wire:click="showAdd" class="btn btn-primary">Add Client</a>
-                            {{-- <a href="#" wire:click="resetForm" class="btn btn-primary">Add Client</a> --}}
+                           <a href="#" wire:click="showAdd" class="btn btn-primary">Add Client</a>
+                           {{-- <a href="#" wire:click="resetForm" class="btn btn-primary">Add Client</a> --}}
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center justify-between py-4 px-5 gap-4">
-                    <x-form.input
-                        name="first_name"
-                        wire:model="search"
-                        wire:input="updateSearch"
-                        placeholder="Search clients..." />
-                    <x-form.select
-                        wire:model="perPage"
-                        wire:change="updatePerPage"
-                        name="perPage"
-                        :options="[
-                            '5'   => '5 per page',
-                            '10' => '10 per page',
-                            '25' => '25 per page',
-                        ]" />
+                <div class="flex items-center justify-between mb-4">
+                    <input type="text" wire:model="search" wire:input="updateSearch" placeholder="Search clients..." />
+                    <select wire:model="perPage" wire:change="updatePerPage" class="border rounded px-2 py-1">
+                        <option value="5">5 per page</option>
+                        <option value="10">10 per page</option>
+                        <option value="25">25 per page</option>
+                    </select>
                 </div>
                 <div class="card-body pt-3">
                     <div class="table-responsive">
@@ -77,8 +54,7 @@
                                     <td>
                                         <div class="flex items-center w-44">
                                             <div class="shrink-0">
-                                                 <img src="{{ $client->avatar ? asset('storage/' . $client->avatar) : asset('assets/images/user/avatar-1.jpg') }}" class="rounded-full w-10" />
-
+                                                <img src="{{ $client->avatar ? asset('storage/' . $client->avatar) : asset('assets/images/user/avatar-1.jpg') }}" class="rounded-full w-10" />
                                             </div>
                                             <div class="grow ltr:ml-3 rtl:mr-3">
                                                 <h6 class="mb-0">{{ $client->first_name }} {{ $client->last_name }}</h6>
