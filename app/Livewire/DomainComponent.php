@@ -13,6 +13,11 @@ class DomainComponent extends Component
         $this->mode = 'index';
     }
 
+    public function showAdd()
+    {
+      $this->mode = 'add';
+    }
+
     public function render()
     {
         return view('livewire.domain');
