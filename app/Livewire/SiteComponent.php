@@ -9,6 +9,7 @@ use App\Models\Site;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class SiteComponent extends Component
 {
@@ -37,11 +38,12 @@ class SiteComponent extends Component
     public $siteId = null;
     public $clients = [];
     public $domains = [];
+    public $provisioningStatuses = ['pending','active','failed'];
 
     public $site = [
         'client_id' => '',
         'domain_id' => '',
-        'provisioning_status' => '',
+        'provisioning_status' => 'pending',
         'cpanel_username' => '',
         'cpanel_password' => '',
         'cpanel_url' => '',
@@ -101,13 +103,19 @@ class SiteComponent extends Component
         $validated = $this->validate([
             'site.client_id' => 'required|exists:clients,id',
             'site.domain_id' => 'required|exists:domains,id',
-            'site.provisioning_status' => 'required|string|max:255',
+            'site.provisioning_status' => ['required', Rule::in($this->provisioningStatuses)],
             'site.cpanel_username' => 'required|string|max:255',
             'site.cpanel_password' => 'required|string|max:255',
             'site.cpanel_url' => 'required|url|max:255',
             'site.provisioned_at' => 'required|date',
+            // only required when status === active
+            'site.provisioned_at'      => [
+                Rule::requiredIf(fn() => $this->site['provisioning_status'] === 'active'),
+                'nullable',
+                'date',
+            ],
         ]);
-
+        
         $siteValidated = $validated['site'];
 
         if ($this->siteId) {
@@ -124,6 +132,13 @@ class SiteComponent extends Component
         $this->mode = 'index';
     }
 
+    public function updatedSiteProvisioningStatus($new)
+    {
+    if ($new === 'active') {
+        // format as HTML5 datetime-local value:
+        $this->site['provisioned_at'] = now()->format('Y-m-d\TH:i');
+    }
+    }
     public function delete($id)
     {
         $site = Site::findOrFail($id);
