@@ -52,7 +52,7 @@
                         <div class="mb-3">
                             <label class="form-label">Plan</label>
                             <select wire:model.defer="subscription.plan_id" class="form-select">
-                                <option value="">-- Select Client --</option>
+                                <option value="">-- Select Plan --</option>
                                 @foreach($plans as $plan)
                                     <option value="{{ $plan->id }}">{{ $plan->name }}</option>
                                 @endforeach
