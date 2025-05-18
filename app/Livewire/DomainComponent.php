@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class DomainsComponent extends Component
+class DomainComponent extends Component
 {
      public $mode = 'index';
      
@@ -15,6 +15,6 @@ class DomainsComponent extends Component
 
     public function render()
     {
-        return view('livewire.domains');
+        return view('livewire.domain');
     }
 }

@@ -80,6 +80,16 @@
                     </a>
                 </li>
                 <li class="pc-item">
+                    <a href="/dashboard/domains" class="pc-link">
+                        <span class="pc-micon">
+                            <svg class="pc-icon">
+                                <use xlink:href="#custom-story"></use>
+                            </svg>
+                        </span>
+                        <span class="pc-mtext" data-i18n="domains">domains</span>
+                    </a>
+                </li>
+                <li class="pc-item">
                     <a href="/dashboard/sites" class="pc-link">
                         <span class="pc-micon">
                             <svg class="pc-icon">
