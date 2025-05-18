@@ -17,42 +17,41 @@
     <div class="col-span-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">New Subscription</h5>
+                <h5 class="mb-0">New Domain</h5>
             </div>
             <div class="card-body">
                 <form wire:submit.prevent="save" class="grid grid-cols-12 gap-x-6">
                     <div class="col-span-12 md:col-span-6">
-                        <div class="mb-3">
-                            <label for="client_id" class="form-label">Client</label>
-                            <select id="client_id" wire:model.defer="client_id" class="form-select">
-                                <option value="">-- Select Client --</option>
-                                    <option value="1">cleint 1</option>
-                                    <option value="1">cleint 2</option>
-                            </select>
-                            @error('client_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                        </div>
+                        <label for="client_id">Client</label>
+                        <select name="client_id" id="" wire:model="domain.client_id" class="form-select">
+                            <option value="">Select Client</option>
+                            @foreach ($clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }}</option>
+                            @endforeach
+                        </select>
+                        @error('domain.client_id') <span class="text-red-600">{{ $message }}</span> @enderror
                     </div>
                     <div class="col-span-12 md:col-span-6">
                         <div class="mb-3">
                             <x-form.input
                                 label="Domain Name"
-                                wire:model.defer=" "
+                                wire:model="domain.domain_name"
                                 name="domain_name"
                                 type="text"
                                 placeholder="e.g. example.com or client.palgoals.com"
                             />
-                            @error('client_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                            @error('domain_name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-span-12 md:col-span-6">
                         <div class="mb-3">
-                            <label for="client_id" class="form-label">Registrar Domain</label>
-                            <select id="client_id" wire:model.defer="client_id" class="form-select">
-                                <option value="">-- Select Registrar Domain --</option>
-                                    <option value="1">enom</option>
-                                    <option value="1">namcheap</option>
+                            <label for="registrar" class="form-label">Registrar Domain</label>
+                            <select id="registrar" wire:model="domain.registrar" class="form-select">
+                                <option value="" @selected($domain['registrar'] == '')>-- Select Registrar Domain --</option>
+                                    <option value="enom" @selected($domain['registrar'] == 'enom')>enom</option>
+                                    <option value="namcheap" @selected($domain['registrar'] == 'namcheap')>namcheap</option>
                             </select>
-                            @error('client_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                            @error('registrar') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-span-12 md:col-span-6">
@@ -60,11 +59,11 @@
                             <x-form.input
                                 label="Registration Date"
                                 wire:model.defer="domain.registration_date"
-                                name="domain_name"
+                                name="registration_date"
                                 type="date"
-                                placeholder="e.g. example.com or client.palgoals.com"
+                                placeholder="Registration Date"
                             />
-                            @error('domain.registration_date') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                            @error('registration_date') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-span-12 md:col-span-6">
@@ -74,9 +73,9 @@
                                 wire:model.defer="domain.renewal_date"
                                 name="domain_name"
                                 type="date"
-                                placeholder="e.g. example.com or client.palgoals.com"
+                                placeholder="Renewal Date"
                             />
-                            @error('domain.renewal_date') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                            @error('renewal_date') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-span-12 md:col-span-6">
@@ -84,11 +83,11 @@
                             <label for="domain.status" class="form-label">Status</label>
                             <select id="domain.status" wire:model.defer="domain.status" class="form-select">
                                 <option value="">-- Select Registrar Domain --</option>
-                                    <option value="active">active</option>
-                                    <option value="expired">expired</option>
-                                    <option value="pending">pending</option>
+                                    <option value="active" @selected($domain['status'] == 'active')>active</option>
+                                    <option value="expired" @selected($domain['status'] == 'expired')>expired</option>
+                                    <option value="pending" @selected($domain['status'] == 'pending')>pending</option>
                             </select>
-                            @error('domain.status') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                            @error('status') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-span-12 text-right">

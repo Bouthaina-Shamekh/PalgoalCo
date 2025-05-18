@@ -15,6 +15,8 @@ class Subscription extends Model
         'status',
         'start_date',
         'end_date',
+        'domain_option',
+        'domain_name'
     ];
 
     public function client(): BelongsTo

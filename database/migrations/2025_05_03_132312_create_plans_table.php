@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();          // اسم الخطة
             $table->decimal('price', 10, 2);           // السعر (مثلاً 99.99)
-            $table->text('features')->nullable();      // ميزات الخطة (JSON أو نص)
+            $table->json('features')->nullable();      // ميزات الخطة (JSON أو نص)
             $table->timestamps();
         });
     }

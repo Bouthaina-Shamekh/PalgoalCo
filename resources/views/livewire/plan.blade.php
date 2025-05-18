@@ -8,10 +8,10 @@
         </button>
     </div>
     @if ($mode === 'index')
-        @include('livewire.partials.subscription.index')
+        @include('livewire.partials.plan.index')
     @elseif ($mode === 'add')
-        @include('livewire.partials.subscription.add')
+        @include('livewire.partials.plan.add')
     @elseif ($mode === 'edit')
-        @include('livewire.partials.subscription.edit')
+        @include('livewire.partials.plan.edit')
     @endif
 </div>

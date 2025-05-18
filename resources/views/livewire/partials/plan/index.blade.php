@@ -3,11 +3,11 @@
         <div class="page-block">
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Sites</a></li>
-                <li class="breadcrumb-item" aria-current="page">Sites List</li>
+                <li class="breadcrumb-item"><a href="#">Plans</a></li>
+                <li class="breadcrumb-item" aria-current="page">Plans List</li>
             </ul>
             <div class="page-header-title">
-                <h2 class="mb-0">Sites List</h2>
+                <h2 class="mb-0">Plans List</h2>
             </div>
         </div>
     </div>
@@ -17,15 +17,15 @@
             <div class="card table-card">
                 <div class="card-header">
                     <div class="sm:flex items-center justify-between">
-                        <h5 class="mb-3 sm:mb-0">Sites List</h5>
+                        <h5 class="mb-3 sm:mb-0">Plans List</h5>
                         <div>
-                           <a href="#" wire:click="showAdd" class="btn btn-primary">Add Client</a>
-                           {{-- <a href="#" wire:click="resetForm" class="btn btn-primary">Add Client</a> --}}
+                           <a href="#" wire:click="showAdd" class="btn btn-primary">Add Plan</a>
+                           {{-- <a href="#" wire:click="resetForm" class="btn btn-primary">Add Plan</a> --}}
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between mb-4">
-                    <input type="text" wire:model="search" wire:input="updateSearch" placeholder="Search Sites..." />
+                    <input type="text" wire:model="search" wire:input="updateSearch" placeholder="Search plans..." />
                     <select wire:model="perPage" wire:change="updatePerPage" class="border rounded px-2 py-1">
                         <option value="5">5 per page</option>
                         <option value="10">10 per page</option>
@@ -38,38 +38,40 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Clients</th>
-                                    <th>Domains</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Features</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($sites as $site)
+                                @forelse ($plans as $plan)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
-                                        <div class="flex items-center w-44">
-                                            <div class="grow ltr:ml-3 rtl:mr-3">
-                                                <h6 class="mb-0">{{ $site->client->first_name }} {{ $site->client->last_name }}</h6>
-                                            </div>
-                                        </div>
+                                       {{ $plan->name }}
                                     </td>
-                                    <td>{{$site->domain->domain_name}}</td>
+                                    <td>{{ $plan->price }}</td>
                                     <td>
-                                        <a wire:click="showView({{ $site->id }})" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
-                                            <i class="ti ti-eye text-xl leading-none"></i>
-                                        </a>
-                                        <a wire:click="showEdit({{ $site->id }})" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                        @foreach (array_slice(json_decode($plan->features, true), 0, 3) as $feature)
+                                            <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">{{ $feature }}</span>
+                                        @endforeach
+                                        @if (count(json_decode($plan->features, true)) > 3)
+                                            <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">+{{ count(json_decode($plan->features, true)) - 3 }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a wire:click="showEdit({{ $plan->id }})" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                             <i class="ti ti-edit text-xl leading-none"></i>
                                         </a>
-                                        <a wire:click="delete({{ $site->id }})" onclick="confirm('Are you sure?') || event.stopImmediatePropagation()" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                        <a wire:click="delete({{ $plan->id }})" onclick="confirm('Are you sure?') || event.stopImmediatePropagation()" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                             <i class="ti ti-trash text-xl leading-none"></i>
                                         </a>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="8" class="text-center text-gray-500">No Sites found.</td>
+                                    <td colspan="8" class="text-center text-gray-500">No plans found.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -77,7 +79,7 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    {{ $sites->links() }}
+                    {{ $plans->links() }}
                 </div>
             </div>
         </div>

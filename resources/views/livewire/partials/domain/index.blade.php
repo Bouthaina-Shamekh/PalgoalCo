@@ -53,38 +53,38 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse ($domains as $domain)
                             <tr>
-                                <td>1</td>
-                                <td>Client</td>
-                                <td>Domain Name</td>
-                                <td>Registrar</td>
-                                <td>Registered At</td>
-                                <td>Renewal Date</td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $domain->client->first_name}}</td>
+                                <td>{{ $domain->domain_name }}</td>
+                                <td>{{ $domain->registrar }}</td>
+                                <td>{{ $domain->registration_date }}</td>
+                                <td>{{ $domain->status }}</td>
+                               
                                 <td>
-                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Active</span>
-                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Inactive</span>
-                                </td>
-                                <td>
-                                    <a wire:click="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                    <a wire:click="view({{ $domain->id }})" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                         <i class="ti ti-eye text-xl leading-none"></i>
                                     </a>
-                                    <a wire:click="#" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                    <a wire:click="showEdit({{ $domain->id }})" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                         <i class="ti ti-edit text-xl leading-none"></i>
                                     </a>
-                                    <a wire:click="#" onclick="confirm('Are you sure?') || event.stopImmediatePropagation()" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
+                                    <a wire:click="delete({{ $domain->id }})" onclick="confirm('Are you sure?') || event.stopImmediatePropagation()" class="w-8 h-8 rounded-xl inline-flex items-center justify-center btn-link-secondary">
                                         <i class="ti ti-trash text-xl leading-none"></i>
                                     </a>
                                 </td>
                             </tr>
+                              @empty
                             <tr>
-                                <td colspan="8" class="text-center text-gray-500">No clients found.</td>
+                                <td colspan="8" class="text-center text-gray-500">No Domains found.</td>
                             </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="mt-4">
-                {{-- {{ $clients->links() }} --}}
+                {{-- {{ $domains->links() }} --}}
             </div>
         </div>
     </div>

@@ -99,6 +99,16 @@
                         <span class="pc-mtext" data-i18n="sites">Sites</span>
                     </a>
                 </li>
+                <li class="pc-item">
+                    <a href="/dashboard/plans" class="pc-link">
+                        <span class="pc-micon">
+                            <svg class="pc-icon">
+                                <use xlink:href="#custom-story"></use>
+                            </svg>
+                        </span>
+                        <span class="pc-mtext" data-i18n="plan">Plans</span>
+                    </a>
+                </li>
             
             </ul>
             
