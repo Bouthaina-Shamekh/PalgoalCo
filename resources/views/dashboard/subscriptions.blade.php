@@ -1,3 +1,3 @@
 <x-dashboard-layout>
-    <livewire:subscriptions-component />
+    <livewire:subscription-component />
 </x-dashboard-layout>

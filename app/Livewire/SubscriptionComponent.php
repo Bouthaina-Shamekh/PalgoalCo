@@ -8,7 +8,7 @@ use App\Models\Subscription;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class SubscriptionsComponent extends Component
+class SubscriptionComponent extends Component
 {
     use WithPagination;
     public $mode = 'index';
@@ -75,7 +75,7 @@ class SubscriptionsComponent extends Component
 
     public function render()
     {
-      return view('livewire.subscriptions', [
+      return view('livewire.subscription', [
         'subscriptions' => Subscription::with(['client','plan'])
                                        ->paginate(10),
         'clients' => Client::all(),

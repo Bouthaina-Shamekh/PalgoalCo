@@ -17,6 +17,7 @@ Route::group([
     Route::get('/clients', [HomeController::class, 'clients'])->name('clients');
     Route::get('/subscriptions', [HomeController::class, 'subscriptions'])->name('subscriptions');
     Route::get('/sites', [HomeController::class, 'sites'])->name('sites');
+    Route::get('/domains', [HomeController::class, 'domains'])->name('domains');
 });
 
 
