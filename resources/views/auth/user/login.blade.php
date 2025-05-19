@@ -1,14 +1,12 @@
- @include('layouts.partials.dashboard.head', [
-'title' => __('Login'),
+
+@include('layouts.partials.dashboard.head', [
+    'title' => __('Login'),
 ])
 
 <!-- [ Main Content ] start -->
 
 <div class="auth-main relative">
     <div class="auth-wrapper v2 flex items-center w-full h-full min-h-screen">
-        <div class="auth-sidecontent">
-            <img src="{{ asset('assets-dashboard/images/authentication/img-auth-sideimg.jpg') }}" alt="images" class="img-fluid h-screen hidden lg:block" />
-        </div>
         <div
             class="auth-form flex items-center justify-center grow flex-col min-h-screen bg-cover relative p-6 bg-theme-cardbg dark:bg-themedark-cardbg">
             <div class="card sm:my-12 w-full max-w-[480px] border-none shadow-none">
@@ -18,36 +16,22 @@
                             <img src="{{ asset('assets-dashboard/images/logo.png') }}" alt="img" class="mx-auto"
                                 width="80%" />
                         </a>
-                        @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ol>
-                                @foreach ($errors->getMessages() as $key => $val)
-                                <li>{{ $key . " : " . $val[0] }} </li>
-                                @endforeach
-                            </ol>
-                        </div>
-                        @endif
                         <div class="grid my-4">
-                            <a href=""
+                            <button type="button"
                                 class="btn mt-2 flex items-center justify-center gap-2 text-theme-bodycolor dark:text-themedark-bodycolor bg-theme-bodybg dark:bg-themedark-bodybg border border-theme-border dark:border-themedark-border hover:border-primary-500 dark:hover:border-primary-500">
-                                <img src="{{ asset('assets-dashboard/images/authentication/facebook.svg') }}" alt="img" />
-                                <span>{{__('Sign In with Facebook')}}</span>
-                            </a>
-
-
-                            <a href=""
+                                <img src="{{ asset('assets-dashboard/images/authentication/facebook.svg') }}"
+                                    alt="img" /> <span>{{__('Sign In with Facebook')}}</span>
+                            </button>
+                            <button type="button"
                                 class="btn mt-2 flex items-center justify-center gap-2 text-theme-bodycolor dark:text-themedark-bodycolor bg-theme-bodybg dark:bg-themedark-bodybg border border-theme-border dark:border-themedark-border hover:border-primary-500 dark:hover:border-primary-500">
-                                <img src="{{ asset('assets-dashboard/images/authentication/twitter.svg') }}" alt="img" />
-                                <span>{{__('Sign In with Twitter')}}</span>
-                            </a>
-
-
-                            <a href=""
+                                <img src="{{ asset('assets-dashboard/images/authentication/twitter.svg') }}"
+                                    alt="img" /> <span>{{__('Sign In with Twitter')}}</span>
+                            </button>
+                            <button type="button"
                                 class="btn mt-2 flex items-center justify-center gap-2 text-theme-bodycolor dark:text-themedark-bodycolor bg-theme-bodybg dark:bg-themedark-bodybg border border-theme-border dark:border-themedark-border hover:border-primary-500 dark:hover:border-primary-500">
-                                <img src="{{ asset('assets-dashboard/images/authentication/google.svg') }}" alt="img" />
-                                <span>{{__('Sign In with Google')}}</span>
-                            </a>
-
+                                <img src="{{ asset('assets-dashboard/images/authentication/google.svg') }}"
+                                    alt="img" /> <span>{{__('Sign In with Google')}}</span>
+                            </button>
                         </div>
                     </div>
                     <div class="relative my-5">
@@ -69,7 +53,7 @@
                         </div>
                         <div class="flex mt-1 justify-between items-center flex-wrap">
                             <div class="form-check">
-                                <input class="form-check-input input-primary" type="checkbox" name="remember" id="remember_me" checked="" />
+                                <input class="form-check-input input-primary" type="checkbox"  name="remember" id="remember_me" checked="" />
                                 <label class="form-check-label text-muted" for="remember_me">{{__('Remember me?')}}</label>
                             </div>
                             <h6 class="font-normal text-primary-500 mb-0">
@@ -92,7 +76,7 @@
 <!-- [ Main Content ] end -->
 
 <style>
-    .floting-button {
+    .floting-button{
         display: none;
     }
 </style>

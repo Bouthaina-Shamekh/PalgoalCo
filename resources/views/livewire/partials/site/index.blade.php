@@ -17,7 +17,7 @@
                 <div class="sm:flex items-center justify-between">
                     <h5 class="mb-3 sm:mb-0">Sites List</h5>
                     <div>
-                        <a href="#" wire:click="showAdd" class="btn btn-primary">Add Client</a>
+                        <a href="#" wire:click="showAdd" class="btn btn-primary">Add Site</a>
                     </div>
                 </div>
             </div>

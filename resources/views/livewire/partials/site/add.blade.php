@@ -40,7 +40,7 @@
                     <div class="col-span-12 md:col-span-6">
                         <div class="mb-3">
                             <label for="client_id" class="form-label">Client</label>
-                            <select name="client_id" id="" wire:model="site.client_id" class="form-select">
+                            <select name="client_id" wire:model="site.client_id" class="form-select">
                                 <option value="">Select Client</option>
                                 @foreach ($clients as $client)
                                 <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }}</option>
@@ -52,7 +52,7 @@
                     <div class="col-span-12 md:col-span-6">
                         <div class="mb-3">
                             <label for="domain_id" class="form-label">Domain</label>
-                            <select name="domain_id" id="" wire:model="site.domain_id" class="form-select">
+                            <select name="domain_id" wire:model="site.domain_id" class="form-select">
                                 <option value="">Select Domain</option>
                                 @foreach ($domains as $domain)
                                 <option value="{{ $domain->id }}">{{ $domain->domain_name }}</option>
@@ -74,39 +74,62 @@
                         </div>
                     </div>
                     @if($site['provisioning_status'] === 'active')
-  <div class="col-span-12 md:col-span-6">
-    <div class="mb-3">
-      <label class="form-label">Provisioned At</label>
-      <input
-        type="datetime-local"
-        wire:model.defer="site.provisioned_at"
-        class="form-control"
-      />
-      @error('site.provisioned_at') <span class="text-red-600">{{ $message }}</span> @enderror
-    </div>
-  </div>
-@endif
+                    <div class="col-span-12 md:col-span-6">
+                        <div class="mb-3">
+                            <label class="form-label">Provisioned At</label>
+                            <input type="datetime-local" wire:model.defer="site.provisioned_at" class="form-control" />
+                            @error('site.provisioned_at') <span class="text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                    @endif
                     <div class="col-span-12 md:col-span-6">
                         <div class="mb-3">
                             <x-form.input type="url" name="site.cpanel_url" wire:model.defer="site.cpanel_url" label="cPanel URL" />
                             @error('site.cpanel_url') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                        <div class="col-span-12 md:col-span-6">
-                            <x-form.input name="site.cpanel_username" type="text" wire:model.defer="site.cpanel_username" label="cPanel Username" />
-                            @error('site.cpanel_username') <span class="text-red-600">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-12 md:col-span-6">
-                            <x-form.input name="site.cpanel_password" type="password" wire:model.defer="site.cpanel_password" label="cPanel Password" />
-                            @error('site.cpanel_password') <span class="text-red-600">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-12 text-right">
-                            <button type="button" wire:click="showIndex" class="btn btn-secondary">Cancel</button>
-                            <button type="button" wire:click="save" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="col-span-12 md:col-span-6">
+                        <x-form.input name="site.cpanel_username" type="text" wire:model.defer="site.cpanel_username" label="cPanel Username" />
+                        @error('site.cpanel_username') <span class="text-red-600">{{ $message }}</span> @enderror
+
+                    </div>
+                    <div class="col-span-12 md:col-span-6">
+                        <x-form.input wire:change="checkPassword" name="site.cpanel_password" type="password" wire:model.defer="site.cpanel_password" label="cPanel Password" />
+                        @error('site.cpanel_password') <span class="text-red-600">{{ $message }}</span> @enderror
+                        <span>
+                            @if ($uppercase)
+                            <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Uppercase</span>
+                            @else
+                            <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Uppercase</span>
+                            @endif
+                            @if ($lowercase)
+                            <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Lowercase</span>
+                            @else
+                            <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Lowercase</span>
+                            @endif
+                            @if ($number)
+                            <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Number</span>
+                            @else
+                            <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Number</span>
+                            @endif
+                            @if ($specialChars)
+                            <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Special Character</span>
+                            @else
+                            <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Special Character</span>
+                            @endif
+                        </span>
+                    </div>
+                    <div class="col-span-12 md:col-span-6">
+                        <x-form.input name="provisioned_at" type="datetime-local" wire:model="site.provisioned_at" label="Provisioned At" />
+                        @error('site.provisioned_at') <span class="text-red-600">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="col-span-12 text-right">
+                        <button type="button" wire:click="showIndex" class="btn btn-secondary">Cancel</button>
+                        <button type="button" wire:click="save" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <!-- [ Main Content ] end -->
+</div>
+<!-- [ Main Content ] end -->

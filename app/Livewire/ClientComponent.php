@@ -148,8 +148,13 @@ class ClientComponent extends Component
                 $clientValidated['avatar'] = $client->avatar;
             }
 
-            if (!empty($clientValidated['password'])) {
-                $clientValidated['password'] = bcrypt($clientValidated['password']);
+            if (!empty($this->client['password'])) {
+                $this->checkPassword();
+                if (!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->client['password']) < 8) {
+                    $this->showAlert('Password should be at least 8 characters in length and include an uppercase letter, a number, and a special character.', 'warning');
+                    return;
+                }
+                $clientValidated['password'] = bcrypt($this->client['password']);
             } else {
                 unset($clientValidated['password']);
             }
@@ -161,7 +166,17 @@ class ClientComponent extends Component
                 $clientValidated['avatar'] = $this->client['avatar']->store('avatars', 'public');
             }
 
-            $clientValidated['password'] = bcrypt($clientValidated['password']);
+            if (!empty($this->client['password'])) {
+                $this->checkPassword();
+                if (!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->client['password']) < 8) {
+                    $this->showAlert('Password should be at least 8 characters in length and include an uppercase letter, a number, and a special character.', 'warning');
+                    return;
+                }
+                $clientValidated['password'] = bcrypt($this->client['password']);
+            } else {
+                $this->showAlert('Password is required.', 'warning');
+                return;
+            }
             Client::create($clientValidated);
             $this->showAlert('Client added successfully.', 'success');
         }

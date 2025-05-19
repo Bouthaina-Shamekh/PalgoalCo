@@ -98,6 +98,24 @@ class SiteComponent extends Component
         $this->siteId = null;
     }
 
+    public $uppercase;
+    public $lowercase;
+    public $number;
+    public $specialChars;
+    public function checkPasswordError(){
+        $this->uppercase = preg_match('@[A-Z]@', $this->site['cpanel_password']);
+        $this->lowercase = preg_match('@[a-z]@', $this->site['cpanel_password']);
+        $this->number    = preg_match('@[0-9]@', $this->site['cpanel_password']);
+        $this->specialChars = preg_match('@[^\w]@', $this->site['cpanel_password']);
+    }
+    public function checkPassword(){
+        $this->checkPasswordError();
+        if(!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->site['cpanel_password']) < 8) {
+            $this->showAlert('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.', 'warning');
+            return;
+        }
+        $this->closeModal();
+    }
     public function save()
     {
         $validated = $this->validate([
@@ -115,14 +133,26 @@ class SiteComponent extends Component
                 'date',
             ],
         ]);
-        
+
         $siteValidated = $validated['site'];
 
         if ($this->siteId) {
             $site = Site::findOrFail($this->siteId);
+            if($site->cpanel_password != $this->site['cpanel_password']){
+                $this->checkPassword();
+                if (!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->site['cpanel_password']) < 8) {
+                    $this->showAlert('Password should be at least 8 characters in length and include an uppercase letter, a number, and a special character.', 'warning');
+                    return;
+                }
+            }
             $site->update($siteValidated);
             $this->showAlert('Site updated successfully.', 'success');
         } else {
+            $this->checkPassword();
+            if (!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->site['cpanel_password']) < 8) {
+                $this->showAlert('Password should be at least 8 characters in length and include an uppercase letter, a number, and a special character.', 'warning');
+                return;
+            }
             Site::create($siteValidated);
             $this->showAlert('Site added successfully.', 'success');
         }

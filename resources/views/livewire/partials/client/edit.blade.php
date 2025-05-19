@@ -80,6 +80,7 @@
                                 name="password"
                                 type="password"
                                 wire:model="client.password"
+                                wire:input="checkPassword"
                                 label="password" />
                             @error('client.password') <span class="text-red-600">{{ $message }}</span> @enderror
                             <span>
@@ -108,6 +109,7 @@
                         <div class="col-span-12 md:col-span-6">
                             <x-form.input
                                 wire:model="client.confirm_password"
+                                wire:input="checkPassword"
                                 type="password"
                                 label="Confirm Password" />
                             @error('client.confirm_password') <span class="text-red-600">{{ $message }}</span> @enderror
@@ -120,7 +122,7 @@
                                     accept="image/*"
                                     class="form-control" />
                                 @error('client.avatar') <span class="text-red-600">{{ $message }}</span> @enderror
-                                <img src="{{ $client['avatar_url'] ? asset('storage/' . $client['avatar_url']) : '' }}" class="mt-2 w-20 h-20" />
+                                {{-- <img src="{{ $client['avatar_url'] ? asset('storage/' . $client['avatar_url']) : '' }}" class="mt-2 w-20 h-20" /> --}}
                             </div>
                         </div>
                         <div class="col-span-12 text-right">

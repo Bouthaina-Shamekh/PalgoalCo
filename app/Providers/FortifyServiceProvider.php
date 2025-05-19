@@ -22,7 +22,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        
+
         $request = request();
 
         if($request->is('dashboard/*')){
@@ -82,6 +82,11 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.user.login');
         });
 
+        Fortify::registerView(function () {
+            if(Config::get('fortify.guard') == 'client'){
+                return view('auth.client.register');
+            }
+        });
 
 
         Fortify::createUsersUsing(CreateNewUser::class);

@@ -65,8 +65,30 @@
                             @error('site.cpanel_username') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-12 md:col-span-6">
-                            <x-form.input name="cpanel_password" type="password" wire:model="site.cpanel_password" label="password" />
+                            <x-form.input wire:change="checkPassword" name="cpanel_password" type="password" wire:model="site.cpanel_password" label="password" />
                             @error('site.cpanel_password') <span class="text-red-600">{{ $message }}</span> @enderror
+                            <span>
+                                @if ($uppercase)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Uppercase</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Uppercase</span>
+                                @endif
+                                @if ($lowercase)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Lowercase</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Lowercase</span>
+                                @endif
+                                @if ($number)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Number</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Number</span>
+                                @endif
+                                @if ($specialChars)
+                                    <span class="badge bg-success-500/10 text-success-500 rounded-full text-sm">Special Character</span>
+                                @else
+                                    <span class="badge text-danger bg-danger-500/10 rounded-full text-sm">Special Character</span>
+                                @endif
+                            </span>
                         </div>
                         <div class="col-span-12 md:col-span-6">
                             <x-form.input name="cpanel_url" type="url" wire:model="site.cpanel_url" label="Cpanel Url" />
