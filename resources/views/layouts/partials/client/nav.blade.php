@@ -28,7 +28,7 @@
                     </div>
                     <div class="hidden pc-user-links" id="pc_sidebar_userlink">
                         <div class="pt-3 *:flex *:items-center *:py-2 *:gap-2.5 hover:*:text-primary-500">
-                            <a href="#!">
+                            <a href="{{route('client.update_account')}}">
                                 <i class="text-lg leading-none ti ti-user"></i>
                                 <span>My Account</span>
                             </a>
