@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'whm' => [
+        'host'  => env('CPANEL_HOST'),
+        'port'  => env('CPANEL_PORT', 2087),
+        'user'  => env('CPANEL_USER'),
+        'token' => env('CPANEL_TOKEN'),
+    ],
+
+
+
 ];

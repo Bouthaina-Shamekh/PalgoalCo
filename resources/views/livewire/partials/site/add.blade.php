@@ -43,7 +43,7 @@
                             <select name="client_id" wire:model="site.client_id" class="form-select">
                                 <option value="">Select Client</option>
                                 @foreach ($clients as $client)
-                                <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }}</option>
+                                <option value="{{ $client['id'] }}">{{ $client['first_name'] }} {{ $client['last_name'] }}</option>
                                 @endforeach
                             </select>
                             @error('site.client_id') <span class="text-red-600">{{ $message }}</span> @enderror
@@ -55,7 +55,7 @@
                             <select name="domain_id" wire:model="site.domain_id" class="form-select">
                                 <option value="">Select Domain</option>
                                 @foreach ($domains as $domain)
-                                <option value="{{ $domain->id }}">{{ $domain->domain_name }}</option>
+                                <option value="{{ $domain['id'] }}">{{ $domain['domain_name'] }}</option>
                                 @endforeach
                             </select>
                             @error('site.domain_id') <span class="text-red-600">{{ $message }}</span> @enderror
@@ -94,7 +94,7 @@
 
                     </div>
                     <div class="col-span-12 md:col-span-6">
-                        <x-form.input wire:change="checkPassword" name="site.cpanel_password" type="password" wire:model.defer="site.cpanel_password" label="cPanel Password" />
+                        <x-form.input  name="site.cpanel_password" type="password" wire:model.defer="site.cpanel_password" label="cPanel Password" />
                         @error('site.cpanel_password') <span class="text-red-600">{{ $message }}</span> @enderror
                         <span>
                             @if ($uppercase)

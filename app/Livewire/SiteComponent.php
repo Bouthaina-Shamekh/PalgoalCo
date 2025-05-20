@@ -4,129 +4,140 @@ namespace App\Livewire;
 
 use App\Models\Client;
 use App\Models\Domain;
-use Livewire\Component;
 use App\Models\Site;
-use Livewire\WithFileUploads;
+use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Jobs\ProvisionHosting;
 
 class SiteComponent extends Component
 {
-    use WithFileUploads;
     use WithPagination;
 
-    public $alert = false;
-    public $alertType = 'success';
-    public $alertMessage = '';
+    // --- حالات التنبيه ---
+    public bool $alert       = false;
+    public string $alertType = 'success';
+    public string $alertMessage = '';
 
-    public function showAlert($message, $type = 'success')
+    public function showAlert(string $message, string $type = 'success'): void
     {
-        $this->alert = true;
-        $this->alertType = $type;
+        $this->alert        = true;
+        $this->alertType    = $type;
         $this->alertMessage = $message;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->alert = false;
     }
 
-    public $mode = 'index';
-    public $search = '';
-    public $perPage = 10;
-    public $siteId = null;
-    public $clients = [];
-    public $domains = [];
-    public $provisioningStatuses = ['pending','active','failed'];
+    // --- المتغيرات الرئيسية ---
+    public string $mode     = 'index';
+    public string $search   = '';
+    public int    $perPage  = 10;
+    public ?int   $siteId   = null;
 
-    public $site = [
-        'client_id' => '',
-        'domain_id' => '',
+    public array $clients = [];
+    public array $domains;
+    public array $provisioningStatuses = ['pending', 'active', 'failed'];
+
+    public array $site = [
+        'client_id'           => '',
+        'domain_id'           => '',
         'provisioning_status' => 'pending',
-        'cpanel_username' => '',
-        'cpanel_password' => '',
-        'cpanel_url' => '',
-        'provisioned_at' => '',
+        'cpanel_username'     => '',
+        'cpanel_password'     => '',
+        'cpanel_url'          => '',
+        'provisioned_at'      => '',
     ];
 
-    public function showAdd()
+    // --- نماذج إضافة وتعديل وحذف ---
+    public function showAdd(): void
     {
-        $this->mode = 'add';
-        $this->clients = Client::get();
-        $this->domains = Domain::get();
+        $this->mode    = 'add';
+        $this->clients = Client::all()->toArray();
+        $this->domains = Domain::all()->toArray();
         $this->resetForm();
         $this->closeModal();
     }
 
-    public function showEdit($id)
+    public function showEdit(int $id): void
     {
-        $this->mode = 'edit';
-        $this->siteId = $id;
-        $this->clients = Client::get();
-        $this->domains = Domain::get();
-        $site = Site::findOrFail($id);
-        $this->site = [
-            'client_id' => $site->client_id,
-            'domain_id' => $site->domain_id,
-            'cpanel_username' => $site->cpanel_username,
-            'cpanel_password' => $site->cpanel_password,
-            'cpanel_url' => $site->cpanel_url,
+        $this->mode    = 'edit';
+        $this->siteId  = $id;
+        $this->clients = Client::all()->toArray();
+        $this->domains = Domain::all()->toArray();
+
+        $site          = Site::findOrFail($id);
+        $this->site    = [
+            'client_id'           => $site->client_id,
+            'domain_id'           => $site->domain_id,
+            'cpanel_username'     => $site->cpanel_username,
+            'cpanel_password'     => $site->cpanel_password,
+            'cpanel_url'          => $site->cpanel_url,
             'provisioning_status' => $site->provisioning_status,
-            'provisioned_at' => $site->provisioned_at,
+            'provisioned_at'      => $site->provisioned_at,
         ];
+
         $this->closeModal();
     }
 
-    public function showIndex()
+    public function showIndex(): void
     {
         $this->mode = 'index';
         $this->closeModal();
     }
 
-    public function resetForm()
+    protected function resetForm(): void
     {
         $this->site = [
-            'client_id' => '',
-            'domain_id' => '',
-            'provisioning_status' => '',
-            'cpanel_username' => '',
-            'cpanel_password' => '',
-            'cpanel_url' => '',
-            'provisioned_at' => '',
+            'client_id'           => '',
+            'domain_id'           => '',
+            'provisioning_status' => 'pending',
+            'cpanel_username'     => '',
+            'cpanel_password'     => '',
+            'cpanel_url'          => '',
+            'provisioned_at'      => '',
         ];
         $this->siteId = null;
     }
 
-    public $uppercase;
-    public $lowercase;
-    public $number;
-    public $specialChars;
-    public function checkPasswordError(){
-        $this->uppercase = preg_match('@[A-Z]@', $this->site['cpanel_password']);
-        $this->lowercase = preg_match('@[a-z]@', $this->site['cpanel_password']);
-        $this->number    = preg_match('@[0-9]@', $this->site['cpanel_password']);
-        $this->specialChars = preg_match('@[^\w]@', $this->site['cpanel_password']);
-    }
-    public function checkPassword(){
-        $this->checkPasswordError();
-        if(!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->site['cpanel_password']) < 8) {
-            $this->showAlert('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.', 'warning');
-            return;
-        }
-        $this->closeModal();
-    }
-    public function save()
+    // --- فحص قوة كلمة المرور ---
+    public bool $uppercase;
+    public bool $lowercase;
+    public bool $number;
+    public bool $specialChars;
+
+    protected function checkPasswordError(): void
     {
+        $pw = $this->site['cpanel_password'];
+        $this->uppercase    = (bool) preg_match('@[A-Z]@', $pw);
+        $this->lowercase    = (bool) preg_match('@[a-z]@', $pw);
+        $this->number       = (bool) preg_match('@[0-9]@', $pw);
+        $this->specialChars = (bool) preg_match('@[^\w]@', $pw);
+    }
+
+    protected function validatePasswordStrength(): bool
+    {
+        $this->checkPasswordError();
+        return $this->uppercase
+            && $this->lowercase
+            && $this->number
+            && $this->specialChars
+            && strlen($this->site['cpanel_password']) >= 8;
+    }
+
+    // --- حفظ/تعديل السجل ---
+    public function save(): void
+    {
+        // قواعد التحقق
         $validated = $this->validate([
-            'site.client_id' => 'required|exists:clients,id',
-            'site.domain_id' => 'required|exists:domains,id',
+            'site.client_id'           => 'required|exists:clients,id',
+            'site.domain_id'           => 'required|exists:domains,id',
             'site.provisioning_status' => ['required', Rule::in($this->provisioningStatuses)],
-            'site.cpanel_username' => 'required|string|max:255',
-            'site.cpanel_password' => 'required|string|max:255',
-            'site.cpanel_url' => 'required|url|max:255',
-            'site.provisioned_at' => 'required|date',
-            // only required when status === active
+            'site.cpanel_username'     => 'required|string|max:255',
+            'site.cpanel_password'     => 'required|string|max:255',
+            'site.cpanel_url'          => 'required|url|max:255',
             'site.provisioned_at'      => [
                 Rule::requiredIf(fn() => $this->site['provisioning_status'] === 'active'),
                 'nullable',
@@ -134,64 +145,77 @@ class SiteComponent extends Component
             ],
         ]);
 
-        $siteValidated = $validated['site'];
+        $data = $validated['site'];
 
         if ($this->siteId) {
+            // تعديل
             $site = Site::findOrFail($this->siteId);
-            if($site->cpanel_password != $this->site['cpanel_password']){
-                $this->checkPassword();
-                if (!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->site['cpanel_password']) < 8) {
-                    $this->showAlert('Password should be at least 8 characters in length and include an uppercase letter, a number, and a special character.', 'warning');
-                    return;
-                }
-            }
-            $site->update($siteValidated);
-            $this->showAlert('Site updated successfully.', 'success');
-        } else {
-            $this->checkPassword();
-            if (!$this->uppercase || !$this->lowercase || !$this->number || !$this->specialChars || strlen($this->site['cpanel_password']) < 8) {
-                $this->showAlert('Password should be at least 8 characters in length and include an uppercase letter, a number, and a special character.', 'warning');
+
+            // إذا غير المستخدم كلمة المرور، نتحقق من قوتها
+            if ($site->cpanel_password !== $data['cpanel_password'] && ! $this->validatePasswordStrength()) {
+                $this->showAlert(
+                    'Password must be ≥8 chars, include uppercase, number & special char.',
+                    'warning'
+                );
                 return;
             }
-            Site::create($siteValidated);
+
+            $site->update($data);
+            $this->showAlert('Site updated successfully.', 'success');
+        } else {
+            // إنشاء جديد: نرجع فحص كلمة المرور قبل الإدراج
+            if (! $this->validatePasswordStrength()) {
+                $this->showAlert(
+                    'Password must be ≥8 chars, include uppercase, number & special char.',
+                    'warning'
+                );
+                return;
+            }
+
+            $site = Site::create($data);
             $this->showAlert('Site added successfully.', 'success');
         }
+
+        // جدولة Job لإنشاء الحساب على السيرفر بعد الرد على المستخدم
+        ProvisionHosting::dispatchAfterResponse($site->id);
 
         $this->resetForm();
         $this->resetPage();
         $this->mode = 'index';
     }
 
-    public function updatedSiteProvisioningStatus($new)
+    // إذا اخترنا الحالة active، نملأ تلقائياً تاريخ provisioned_at
+    public function updatedSiteProvisioningStatus(string $value): void
     {
-    if ($new === 'active') {
-        // format as HTML5 datetime-local value:
-        $this->site['provisioned_at'] = now()->format('Y-m-d\TH:i');
+        if ($value === 'active') {
+            $this->site['provisioned_at'] = now()->format('Y-m-d\TH:i');
+        }
     }
-    }
-    public function delete($id)
-    {
-        $site = Site::findOrFail($id);
-        $site->delete();
 
+    // حذف السجل
+    public function delete(int $id): void
+    {
+        Site::findOrFail($id)->delete();
         $this->showAlert('Site deleted successfully.', 'success');
         $this->resetPage();
     }
 
-    public function updateSearch()
+    // إعادة تهيئة الصفحة عند تغيير البحث أو عدد الصفوف
+    public function updateSearch(): void
     {
         $this->resetPage();
     }
 
-    public function updatePerPage()
+    public function updatePerPage(): void
     {
         $this->resetPage();
     }
 
+    // عرض البيانات
     public function render()
     {
         $sites = Site::query()
-            ->orWhere('cpanel_username', 'like', '%' . $this->search . '%')
+            ->when($this->search, fn($q) => $q->where('cpanel_username', 'like', "%{$this->search}%"))
             ->paginate($this->perPage);
 
         return view('livewire.site', compact('sites'));
