@@ -9,43 +9,56 @@ class ProvisioningService
 
     public function __construct()
     {
-        // استخدم URL مُجمّع مع المنفذ من config/services.php
-        $baseUrl = rtrim(config('services.whm.url'), '/');
-        $token   = config('services.whm.token');
-        $username   = config('services.whm.token');
+        $baseUrl = rtrim(config('services.whm.url'), '/'); // مثال: https://server.palgoals.com:2087
+        $token   = config('services.whm.token');          // مثال: CRAYI60KUOFQCOLCZ887JG51JLF6N94S
 
         $this->http = new Client([
-            'base_uri' => $baseUrl . '/',  // مثال: https://server.palgoals.com:2087/
-            'verify'   => false,           // تعطيل التحقق من SSL (لبيئة الاختبار)
+            'base_uri' => $baseUrl . '/',
+            'verify'   => false,  // فقط للبيئة التجريبية، غيرها true في الإنتاج
             'headers'  => [
-                // يجب تمرير قيمة "root:TOKEN" في متغير CPANEL_TOKEN أو يمكنك إضافة مفتاح user في config
-                'Authorization' => "WHM {$username}:{$token}",
+                'Authorization' => "WHM root:{$token}",
             ],
         ]);
     }
 
     /**
-     * تنشئ حساب استضافة جديد في cPanel/WHM
+     * تنشئ حساب استضافة جديد في WHM
      *
-     * @param  string  $domain
-     * @param  string  $username
-     * @param  string  $password
-     * @param  string  $plan    اسم الباكج (ابحث عنه في WHM > Packages)
-     * @return array  استجابة API مفككة إلى مصفوفة
+     * @param string $domain
+     * @param string $username
+     * @param string $password
+     * @param string $plan
+     * @return array
      */
-    public function createAccount(string $domain, string $username, string $password, string $plan): array
+    public function createAccount(string $domain, string $username, string $password, string $plan = '', int $quota = 0, int $bwlimit = 0, string $contactEmail = ''): array
     {
+        $params = [
+            'api.version' => 1,
+            'username'    => $username,
+            'domain'      => $domain,
+            'password'    => $password,
+        ];
+
+        if ($plan !== '') {
+            $params['plan'] = $plan;
+        }
+
+        if ($quota > 0) {
+            $params['quota'] = $quota;
+        }
+
+        if ($bwlimit > 0) {
+            $params['bwlimit'] = $bwlimit;
+        }
+
+        if ($contactEmail !== '') {
+            $params['contactemail'] = $contactEmail;
+        }
+
         $response = $this->http->get('json-api/createacct', [
-            'query' => [
-                'api.version' => 1,
-                'username'    => $username,
-                'domain'      => $domain,
-                'password'    => $password,
-                'plan'        => $plan,
-            ],
+            'query' => $params,
         ]);
 
-        // فك JSON للإخراج
         return json_decode((string) $response->getBody(), true);
     }
 }

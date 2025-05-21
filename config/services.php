@@ -36,6 +36,7 @@ return [
     ],
 
     'whm' => [
+        'url'   => env('CPANEL_URL'),
         'host'  => env('CPANEL_HOST'),
         'port'  => env('CPANEL_PORT', 2087),
         'user'  => env('CPANEL_USER'),

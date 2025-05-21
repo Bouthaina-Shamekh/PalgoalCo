@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
             // علاقة بالمشتري/العميل
-            $table->foreignId('client_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
+            $table->foreignId('client_id')->constrained()->cascadeOnDelete();
             // علاقة بالدومين
-            $table->foreignId('domain_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
+            $table->foreignId('domain_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('subscription_id')->constrained()->cascadeOnDelete();
             // حالة التزويد (provisioning)
             $table->string('provisioning_status');
             // بيانات دخول cPanel

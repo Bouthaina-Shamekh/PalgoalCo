@@ -63,6 +63,30 @@
                     </div>
                     <div class="col-span-12 md:col-span-6">
                         <div class="mb-3">
+                            <label for="subscription_id" class="form-label">Subscription</label>
+                            <select name="subscription_id" wire:model="site.subscription_id" class="form-select">
+                                <option value="">Select Subscription</option>
+                                @foreach ($subscriptions as $subscription)
+                                    <option value="{{ $subscription['id'] }}">{{ $subscription['domain_name'] }}</option>
+                                @endforeach
+                            </select>
+                            @error('site.subscription_id') <span class="text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                    <div class="col-span-12 md:col-span-6">
+                        <div class="mb-3">
+                            <label for="plan_id" class="form-label">Plan</label>
+                            <select name="plan_id" wire:model="site.plan_id" class="form-select">
+                                <option value="">Select Plan</option>
+                                @foreach ($plans as $plan)
+                                <option value="{{ $plan['id'] }}">{{ $plan['name'] }}</option>
+                                @endforeach
+                            </select>
+                            @error('site.plan_id') <span class="text-red-600">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                    <div class="col-span-12 md:col-span-6">
+                        <div class="mb-3">
                             <label for="site.provisioning_status" class="form-label">Provisioning Status</label>
                             <select name="site.provisioning_status" wire:model.defer="site.provisioning_status" class="form-select">
                                 <option value="">Select Provisioning Status</option>
@@ -73,18 +97,9 @@
                             @error('site.provisioning_status') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    @if($site['provisioning_status'] === 'active')
                     <div class="col-span-12 md:col-span-6">
                         <div class="mb-3">
-                            <label class="form-label">Provisioned At</label>
-                            <input type="datetime-local" wire:model.defer="site.provisioned_at" class="form-control" />
-                            @error('site.provisioned_at') <span class="text-red-600">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-                    @endif
-                    <div class="col-span-12 md:col-span-6">
-                        <div class="mb-3">
-                            <x-form.input type="url" name="site.cpanel_url" wire:model.defer="site.cpanel_url" label="cPanel URL" />
+                            <x-form.input type="url" name="site.cpanel_url" wire:model.defer="site.cpanel_url" disabled label="cPanel URL" />
                             @error('site.cpanel_url') <span class="text-red-600">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -94,7 +109,7 @@
 
                     </div>
                     <div class="col-span-12 md:col-span-6">
-                        <x-form.input  name="site.cpanel_password" type="password" wire:model.defer="site.cpanel_password" label="cPanel Password" />
+                        <x-form.input  name="site.cpanel_password" wire:input="checkPassword" type="password" wire:model.defer="site.cpanel_password" label="cPanel Password" />
                         @error('site.cpanel_password') <span class="text-red-600">{{ $message }}</span> @enderror
                         <span>
                             @if ($uppercase)
