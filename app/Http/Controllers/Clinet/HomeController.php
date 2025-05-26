@@ -16,4 +16,9 @@ class HomeController extends Controller
     {
         return view('client.updateclinet');
     }
+
+    public function domainNameSearch()
+    {
+        return view('client.domain-name-search');
+    }
 }
