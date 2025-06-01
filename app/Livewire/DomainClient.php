@@ -49,6 +49,8 @@ class DomainClient extends Component
     public $domain_price = 0;
     public $domain_available = null;
     public $domain_check = false;
+    public $domain_extensions_available = [];
+    public $domain_names_available = [];
 
     public $domain_extensions = [
         '.com' => 9,
@@ -91,6 +93,31 @@ class DomainClient extends Component
             $this->domainData['registration_date'] = Carbon::now()->format('Y-m-d');
             $this->domainData['renewal_date'] = Carbon::now()->addYears(1)->format('Y-m-d');
             $this->domainData['status'] = 'pending';
+            $this->domain_extensions_available = [];
+            $this->domain_names_available = [];
+        }
+        if (!$this->domain_available) {
+            $this->domain_extensions_available = [];
+            $this->domain_names_available = [];
+            foreach($this->domain_extensions as $extension => $price){
+                $domain = $this->domain_name . $extension;
+                $this->domain_available = $this->checkDomainWithRapidApi($domain);
+                if ($this->domain_available) {
+                    $this->domain_extensions_available[] = $extension;
+                }
+            }
+            if(count($this->domain_extensions_available) == 0){
+                $found = 0;
+                while ($found < 3) {
+                    $random_string = substr(str_shuffle(MD5(microtime())), 0, 3);
+                    $domain = $this->domain_name . $random_string . $this->domain_extension;
+                    $domain_available = $this->checkDomainWithRapidApi($domain);
+                    if ($domain_available) {
+                        $this->domain_names_available[] = $domain;
+                        $found++;
+                    }
+                }
+            }
         }
         // $this->showAlert('Domain ' . $domain . ' is available.', 'success');
     }

@@ -61,16 +61,23 @@
                                   </svg>
                                   <div>{{ $domain_available ? 'The domain "' . $domain . '" is available' : 'The domain "' . $domain . '" is not available' }}</div>
                                 </div>
+                                <div class="mt-2">
+                                    @if(!$domain_available && count($domain_extensions_available) > 0)
+                                        <span class="text-lg">But you can buy it for</span>
+                                        @foreach ($domain_extensions_available as $extension)
+                                            <span class="text-lg btn btn-outline-success">{{ $domain_extensions[$extension] }}$ {{ $extension }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-lg">Please try another domain Example:</span>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach ($domain_names_available as $domain_name)
+                                                <span class="text-sm btn btn-outline-success">{{ $domain_name }}</span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             @endif
-                        </div>
-                        <div class="flex items-center gap-2">
-                            @foreach ($domain_extensions as $extension => $price)
-                                <button type="button" wire:click="setExtension('{{ $extension }}')" class="btn btn-outline-success flex items-center flex-col gap-2 text-lg flex-auto">
-                                    <span>{{ $extension }}</span>
-                                    <span class="text-lg">{{ $price }}$</span>
-                                </button>
-                            @endforeach
                         </div>
                         <div class="col-span-12 text-right">
                             <button type="button" wire:click="showIndex" class="btn btn-secondary">Cancel</button>
